@@ -22,8 +22,8 @@ yOLo_Downloader() {
 	cCharU=$(echo $URLi | wc -c)
 	gUname=$(curl -s -L ${URLi} | grep -Po '(?<=username":").*?(?=")' | sed -e '$!d');
 	if [[ $cCharU =~ '41' ]]; then
-		uRLpD=$(curl -s "${URLi}" | grep -Po '(?<=display_url":").*?(?=")')
-		wget ${uRLpD} -O "${gUname}_.jpg" > /dev/null 2>&1
+		uRLpD=$(curl -s "${URLi}" | grep -Po '(?<=display_url":").*?(?=")' | sed 's/\\u0026/\&/g') 
+		wget "${uRLpD}" -O "${gUname}_.jpg" > /dev/null 2>&1
 		printf ${HIJAU}
 		echo -ne "   [OK] Download . . . . "
 		sleep 2s
@@ -48,8 +48,9 @@ SmUa_Downloader() {
 		sleep 2s
 		start=1;
 		cekr=1;
+		sed -i 's/\\u0026/\&/g' tmp_list-url-photos.txt
 		for uRLpD in $(cat tmp_list-url-photos.txt); do
-			wget ${uRLpD} -O "${uSerIG}/${uSerIG}_$((start++)).jpg" > /dev/null 2>&1
+			wget "${uRLpD}" -O "${uSerIG}/${uSerIG}_$((start++)).jpg" > /dev/null 2>&1
 			if [[ $(ls ${uSerIG}) =~ "${uSerIG}_$((cekr++)).jpg" ]]; then
 				printf ${HIJAU}
 				echo -ne "   [OK] Download . . . . "
@@ -64,7 +65,7 @@ SmUa_Downloader() {
 }
 printf ${CYAN}
 echo " 1. Download Instagram Photos [Use Link Photos IG]";
-echo " 2. Download All Instagram Photos [Use Username + Get 12 Photos ]";
+echo " 2. Download All Instagram Photos [Use Username + Get 24 Photos ]";
 printf ${NORMAL}
 read -p "Pilih? " pIlIH
 if [[ $pIlIH =~ '1' ]]; then
